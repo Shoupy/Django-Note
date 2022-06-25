@@ -138,7 +138,7 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
-</pre></code> 
+</code> </pre>
 
 這時我們import include 函式，include的意義是讓url後面有challenges時，納入challenges app中的urls.py去進一步搜尋，因此程式碼變成這樣
 <pre><code> 
@@ -150,13 +150,94 @@ urlpatterns = [
     path('challenges/', include("challenges.urls"))
 ]
 
-</pre></code> 
+</code> </pre>
 
 現在我們在回到command line 啟動server一次
 <pre><code> 
 > python manage.py runserver
-</pre></code> 
+</code> </pre>
 
 然後用瀏覽器打開網址 : http://127.0.0.1:8000/challenges/january
 
 應該可以看到螢幕顯示: "This works!"
+
+## 建立其他幾個月份的views
+自行做做看，不過記得function不要重複
+因此我們把views.py中的index function重新命名為 january
+後面的月份加上february, march....
+
+這樣views.py 中看起會像下面:
+<pre><code> 
+def january(request):
+    return HttpResponse("Start a new year!")
+
+def february(request):
+    return HttpResponse("Wake up early every day!")
+
+def march(request):
+    return HttpResponse('learning Django 20 minutes every day!')
+</code> </pre>
+
+challenges.py看起來則像:
+<pre><code> 
+urlpatterns= [
+    path("january", views.january),
+    path("february", views.february),
+    path("march", views.march)
+]
+</code></pre>
+
+
+## 建立有彈性的view (Dynamic)
+在月份的任務中我們知道總共要創建多少view function(而且很幸運的只有12個)
+不過才建了3個月分可以看出這樣非常的累，甚至在有的狀況下，你建立apps的時候並不知道最後會有多少function，每次都要修改urls.py和views.py
+我們可以用一些方式來達成較有彈性，首先在challenges/urls.py中我們改成
+<pre><code> 
+urlpatterns= [
+    path("&lt;month&gt;", views.monthly_challenges)
+]
+</code></pre>
+"&lt;" 和 "&gt;" 框起來的中間對Django而言表示我們不在乎這裡面填寫了甚麼(這邊用month只是個parameter, 以自己可以理解的形式命名)，只要是這樣的形式我們都招喚monthly_challenges這個function
+
+接著我們改動views.py, 建立一個monthly_challenges函式
+(記得也import HttpResponseNotFound這個功能)
+
+<pre><code> 
+def monthly_challenges(request, month):
+    challenge_text = None
+    if month == "january":
+        challenge_text = "Start a new year!"
+    elif month == "february":
+        challenge_text = "Wake up early every day!"
+    elif month == "march":
+        challenge_text = "learning Django 20 minutes every day!"
+    else:
+        return HttpResponseNotFound("this month is not supported. Sorry.")
+    return HttpResponse(challenge_text)
+</code></pre>
+
+這時候已經可以把前面定義的function都刪掉了，只留下monthly_challenges就好了
+可以鍵入http://127.0.0.1:8000/challenges/january 看看結果是不是一樣。
+
+同時試試看 http://127.0.0.1:8000/challenges/december 
+看看是不是有如我們安排的顯示not supported頁面
+
+##path converter
+讓我們試著把view的彈性再擴大一點，前面的<month>並沒有指定任何狀況，通常會被當字串做處理
+有時候我們希望程式把網址中的字串以數字做理解。
+首先我們在views.py定義一個新的function: monthly_challenges_by_number
+<pre><code>
+def monthly_challenges_by_number(request, month):
+    return HttpResponse(month)
+</code></pre>
+
+接著把urls.py改成
+<pre><code>
+urlpatterns= [
+    path("&lt;int:month &gt;", views.monthly_challenges_by_numbers),
+    path("&lt;str:month&gt;", views.monthly_challenges)
+]
+</code></pre>
+
+&lt;int:month&gt;在這裡告訴django我們希望以數字的方式理解他，如果有符合的條件可以回傳
+因此順序也很重要，如果str放在int前面，那永遠都不會呼叫到int了
