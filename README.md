@@ -281,3 +281,11 @@ def monthly_challenges_by_numbers(request, month):
     return HttpResponseRedirect("/challenges/" + redirect_month)
 </code></pre>
 
+進一步還能更改成：
+<pre><code>def monthly_challenges_by_numbers(request, month):
+    months = list (monthly_challenges_dict.keys()) # ["january", "february",....]
+    if month > len(months):
+        return HttpResponseNotFound("I am sorry, invalid month!")
+    redirect_month = months[month-1]
+    return HttpResponseRedirect("/challenges/" + redirect_month)
+
