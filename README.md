@@ -71,7 +71,7 @@ Views可以說是連接不同的URL後，網站啟動的邏輯，可能是一個
 - 載入另一個工作(logic)
 - 準備並返回一個response data (例如: HTML)
 
-## 建立第一個view
+### 建立第一個view
 因為前面是隨便建立的，我們重新建立一個project，叫做"monthly_challenges"，也當作複習前面的操作
 <pre><code> 
 > django-admin startproject monthly_challenges
@@ -94,7 +94,7 @@ def index(request):
     return HttpResponse("This works!")
 </code></pre>
 
-## 將view連接到URL
+### 將view連接到URL
 現在我們已經新增好了第一個view function!問題是，網站並不知道何時要使用這個index function
 這時就需要在challenges資料夾中新建一個urls.py 
 路徑會如下 ./challenges/urls.py
@@ -161,7 +161,7 @@ urlpatterns = [
 
 應該可以看到螢幕顯示: "This works!"
 
-## 建立其他幾個月份的views
+### 建立其他幾個月份的views
 自行做做看，不過記得function不要重複
 因此我們把views.py中的index function重新命名為 january
 後面的月份加上february, march....
@@ -188,7 +188,7 @@ urlpatterns= [
 </code></pre>
 
 
-## 建立有彈性的view (Dynamic)
+### 建立有彈性的view (Dynamic)
 在月份的任務中我們知道總共要創建多少view function(而且很幸運的只有12個)
 不過才建了3個月分可以看出這樣非常的累，甚至在有的狀況下，你建立apps的時候並不知道最後會有多少function，每次都要修改urls.py和views.py
 我們可以用一些方式來達成較有彈性，首先在challenges/urls.py中我們改成
@@ -222,7 +222,7 @@ def monthly_challenges(request, month):
 同時試試看 http://127.0.0.1:8000/challenges/december 
 看看是不是有如我們安排的顯示not supported頁面
 
-##再簡化
+### 再簡化
 可以建立一個dictionary，然後再monthly_challenges中呼叫dictionary的內容
 <pre><code>
 monthly_challenges_dict = {
@@ -248,7 +248,7 @@ def monthly_challenges(request, month):
     return HttpResponse(challenge_text)
 </code></pre>
 
-##path converter
+### path converter
 讓我們試著把view的彈性再擴大一點，前面的<month>並沒有指定任何狀況，通常會被當字串做處理
 有時候我們希望程式把網址中的字串以數字做理解。
 首先我們在views.py定義一個新的function: monthly_challenges_by_number
@@ -269,7 +269,7 @@ urlpatterns= [
 因此順序也很重要，如果str放在int前面，那永遠都不會呼叫到int了
 
 
-## Redirect
+### Redirect
 我們可能希望數字的網址可以自動連結到相對應的月份，例如 /challenges/1 就連結到/challenges/january 。<br>
 這時可以匯入 HttpResponseRedirect函式，並對monthly_challenges_by_number做下面更改
 <pre><code>
