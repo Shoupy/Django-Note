@@ -222,6 +222,32 @@ def monthly_challenges(request, month):
 同時試試看 http://127.0.0.1:8000/challenges/december 
 看看是不是有如我們安排的顯示not supported頁面
 
+##再簡化
+可以建立一個dictionary，然後再monthly_challenges中呼叫dictionary的內容
+<pre><code>
+monthly_challenges_dict = {
+    "january": "Start a new year!",
+    "february": "Wake up early every day!",
+    "march": "learning Django 20 minutes every day!",
+    "april": "Wake up early!",
+    "may":"learning Django 20 minutes every day!",
+    "june": "Wake up early!",
+    "july":"learning Django 20 minutes every day!",
+    "august": "Wake up early!",
+    "september":"learning Django 20 minutes every day!",
+    "october": "Wake up early!",
+    "november":"learning Django 20 minutes every day!",
+    "december": "Wake up early!",
+}
+
+def monthly_challenges(request, month):
+    try:
+        challenge_text = monthly_challenges_dict[month]
+    except:
+        return HttpResponseNotFound("this month is not supported. Sorry.")
+    return HttpResponse(challenge_text)
+</code></pre>
+
 ##path converter
 讓我們試著把view的彈性再擴大一點，前面的<month>並沒有指定任何狀況，通常會被當字串做處理
 有時候我們希望程式把網址中的字串以數字做理解。
@@ -241,3 +267,17 @@ urlpatterns= [
 
 &lt;int:month&gt;在這裡告訴django我們希望以數字的方式理解他，如果有符合的條件可以回傳
 因此順序也很重要，如果str放在int前面，那永遠都不會呼叫到int了
+
+
+## Redirect
+我們可能希望數字的網址可以自動連結到相對應的月份，例如 /challenges/1 就連結到/challenges/january 。<br>
+這時可以匯入 HttpResponseRedirect函式，並對monthly_challenges_by_number做下面更改
+<pre><code>
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+
+def monthly_challenges_by_numbers(request, month):
+    months = list (monthly_challenges_dict.keys()) # ["january", "february",....]
+    redirect_month = months[month-1]
+    return HttpResponseRedirect("/challenges/" + redirect_month)
+</code></pre>
+
