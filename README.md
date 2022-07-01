@@ -287,5 +287,35 @@ def monthly_challenges_by_numbers(request, month):
     if month > len(months):
         return HttpResponseNotFound("I am sorry, invalid month!")
     redirect_month = months[month-1]
-    return HttpResponseRedirect("/challenges/" + redirect_month)
+    return HttpResponseRedirect("/challenges/" + redirect_month) </code></pre>
 
+### Reverse
+上面的程式碼有一些缺點，例如：如果我們想改變中間的子網域 challenges變成 challenge，那:
+- 必須要改urls.py中的 challenges
+- 同時也要改動views.py中 monthly_challenges_by_number裡最後回傳的 /challenges/ 變成 /challenge/
+
+雖然我們不會常常更動網址，但當網站越來越大的時候，難保不會有一些小改動，這時如果漏改了某些地方就會導致掛掉。
+
+這邊我們可以好好的運用Reverse，如果說url() 函式就是將 url --> view 而顯示網頁，那麼reverse就可以說是url的反函式。<br>
+Reverse的功能就是將已經存在的特定view其url反轉出來。在redirect這樣的情形下會很好用。
+
+我們將urls.py中，要導引到的url path命名 (運用 name argument) 改成這樣子：
+<pre><code> urlpatterns= [
+    # path("january", views.january),
+    # path("february", views.february),
+    # path("march", views.march),
+    path("<int:month>", views.monthly_challenges_by_numbers),
+    path("<str:month>", views.monthly_challenges,  name = "month-challenge"),
+] </code></pre>
+
+然後在views.py中這樣定義：
+<pre><code>from django.urls import reverse
+def monthly_challenges_by_numbers(request, month):
+    months = list (monthly_challenges_dict.keys()) # ["january", "february",....]
+    if month > len(months):
+        return HttpResponseNotFound("I am sorry, invalid month!")
+    redirect_month = months[month-1]
+    redirect_path = reverse("month-challenge", args = [redirect_month])  # challenges/january
+    return HttpResponseRedirect(redirect_path) </code></pre>
+    
+注意因為這個url原始的pattern有任意空缺值，因此使用reverse的時候要把args填進去 (以list的形式，外面加上中括弧)
