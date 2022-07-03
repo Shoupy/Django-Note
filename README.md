@@ -319,3 +319,42 @@ def monthly_challenges_by_numbers(request, month):
     return HttpResponseRedirect(redirect_path) </code></pre>
     
 注意因為這個url原始的pattern有任意空缺值，因此使用reverse的時候要把args填進去 (以list的形式，外面加上中括弧)
+
+### 回傳html
+雖然我們目前成功讓網頁顯示了一般文字(plain text)，但實際上一般的網頁都是以HTML寫成
+我們可以將views.py一部分改成html的格式 &lt;h1&gt; title看看
+<pre><code>def monthly_challenges(request, month):
+    try:
+        challenge_text = monthly_challenges_dict[month]
+        response_data = f'<h1>{challenge_text}</h1>'
+    except:
+        return HttpResponseNotFound("<h1>this month is not supported. Sorry.</h1>")
+    return HttpResponse(response_data)</code></pre>
+
+這樣就第一次完成回傳html的任務了
+
+### 自動生成清單頁
+我們現在進入每月挑戰的方式是key入網址，但這並非一般使用者的模式，通常是要有一個目錄頁，讓使用者得以點選連結進去。
+首先一個清單頁大概是以下面的形式
+<pre><code> &lt;ul&gt;
+&lt;li&gt;&lt;a href = "link"&gt; January &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href = "link"&gt; February &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt; </pre></code>
+
+我們新增一個view function: index <br>
+裡面創建一個空白的string，然後用for迴圈把每個月的清單形式輸入，可以善用f字串的方式。
+<pre><code>
+def index(request):
+    list_item=""
+    months = list(monthly_challenges_dict.keys()) # ["january", "february",....]
+
+    for month in months:
+        capitalized_month = month.capitalize()
+        month_path = reverse("month-challenge", args = [month])
+        list_item+=f'&lt;li&gt;&lt;href=\"{month_path}\"&gt; {capitalized_month}&lt;/a&gt;&lt;/li&gt;'
+
+    response_data = f'&lt;ul&gt;{list_item}&lt;/ul&gt;'
+    return HttpResponse(response_data)
+
+
+
