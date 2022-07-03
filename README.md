@@ -343,8 +343,7 @@ def monthly_challenges_by_numbers(request, month):
 
 我們新增一個view function: index <br>
 裡面創建一個空白的string，然後用for迴圈把每個月的清單形式輸入，可以善用f字串的方式。
-<pre><code>
-def index(request):
+<pre><code>def index(request):
     list_item=""
     months = list(monthly_challenges_dict.keys()) # ["january", "february",....]
 
@@ -354,7 +353,11 @@ def index(request):
         list_item+=f'&lt;li&gt;&lt;href=\"{month_path}\"&gt; {capitalized_month}&lt;/a&gt;&lt;/li&gt;'
 
     response_data = f'&lt;ul&gt;{list_item}&lt;/ul&gt;'
-    return HttpResponse(response_data)
+    return HttpResponse(response_data) </code></pre>
 
-
-
+最後也要記得在/challenges/urls.py 加上一個獨立的 path("", views.index) 才會呼叫該函數
+<pre><code>urlpatterns= [
+    path("", views.index), #/challenges/
+    path("<int:month>", views.monthly_challenges_by_numbers),
+    path("<str:month>", views.monthly_challenges,  name = "month-challenge"),
+]</pre></code>
