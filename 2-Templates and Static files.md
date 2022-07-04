@@ -55,7 +55,7 @@ TEMPLATES = [
 
 接著去重新整理頁面，可以發現順利跑出我們剛剛設的templates。
 
-### 法2: 登錄apps
+### 方法2: 登錄apps
 手動輸入路徑位置很精準，但是很麻煩，尤其大部分狀況下，某個templates應該就是給特定app用的。<br>
 在templates中也可以看到'APP_DIRS'這格，是設定為True。因此第二個方法就是告訴程式，我們有某個app，可以搜尋app裡面。<br>
 因此，目的就是將apps registered。同樣在settings.py中可以看到一個區塊'INSTALLED_APPS'，我們在裡面加上challenges
@@ -73,3 +73,9 @@ INSTALLED_APPS = [
 再去重新整理頁面(別忘了把'DIRS'先清空)，會發現這也可以。<br>
 
 通常而言如果是在一個apps內的頁面，會建議用法二。至於有特殊需要globally被使用的頁面，也可以使用法1。<br>
+
+這邊要闡述一下兩件事：
+1. 為何templates資料夾中要再放一個challenges資料夾，才建立challenge.html呢?<br>
+主要是怕搞混，因為django在搜尋templates資料夾時，會把所有templates資料夾併成一個。如果今天你有兩個以上的app，大家的templates中剛好都有challenge.html時，django是分不出來的。因此習慣上我們會在每個apps的template資料夾裡面多放上一個以自己名稱命名的資料夾。
+
+2. render_to_string 這個函式其實是可以被用最基本的 render函式取代的，只是需要使用 <code> render(request,"challenges/challenge.html")</code>的形式，至於為什麼要用request，之後再慢慢解釋
