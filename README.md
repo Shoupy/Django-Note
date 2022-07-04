@@ -328,7 +328,7 @@ def monthly_challenges_by_numbers(request, month):
         challenge_text = monthly_challenges_dict[month]
         response_data = f'<h1>{challenge_text}</h1>'
     except:
-        return HttpResponseNotFound("<h1>this month is not supported. Sorry.</h1>")
+        return HttpResponseNotFound("&lt;h1&gt;this month is not supported. Sorry.&lt;/h1&gt;")
     return HttpResponse(response_data)</code></pre>
 
 這樣就第一次完成回傳html的任務了
