@@ -78,4 +78,21 @@ INSTALLED_APPS = [
 1. 為何templates資料夾中要再放一個challenges資料夾，才建立challenge.html呢?<br>
 主要是怕搞混，因為django在搜尋templates資料夾時，會把所有templates資料夾併成一個。如果今天你有兩個以上的app，大家的templates中剛好都有challenge.html時，django是分不出來的。因此習慣上我們會在每個apps的template資料夾裡面多放上一個以自己名稱命名的資料夾。
 
-2. render_to_string 這個函式其實是可以被用最基本的 render函式取代的，只是需要使用 <code> render(request,"challenges/challenge.html")</code>的形式，至於為什麼要用request，之後再慢慢解釋
+2. render_to_string 這個函式其實是可以被用最基本的 render函式取代的，只是需要使用 <code> render(request,"challenges/challenge.html")</code>的形式，因此以後就用render吧，至於為什麼要用request，之後再慢慢解釋
+
+## 運用模板語言 Template language 和參數插入
+我們不只要呼叫模板的html架構，還要讓這個模板裡面的內容保持動態生成的。<br>
+首先，可以將render新增第三個參數，裡面是一個dictionary，像這樣：
+<pre><code>def monthly_challenges(request, month):
+    try:
+        challenge_text = monthly_challenges_dict[month]
+        response_data = render(request, "challenges/challenge.html", {
+            "text" : challenge_text,
+        })
+    except:
+        return HttpResponseNotFound("this month is not supported. Sorry.")
+    return HttpResponse(response_data) </code></pre>
+    
+這個第三個參數的dictionary，就是用來連結 html 哪些東西需要用dynamic的內容。
+接著更改challenge.html的內容：
+
