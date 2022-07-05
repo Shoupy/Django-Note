@@ -95,4 +95,10 @@ INSTALLED_APPS = [
     
 這個第三個參數的dictionary，就是用來連結 html 哪些東西需要用dynamic的內容。
 接著更改challenge.html的內容：
+![image](https://user-images.githubusercontent.com/43126022/177370691-3501b59c-39bd-45b3-903f-db2d4e304028.png)
+
+我們用 <code> {{ text }} </code> 來取代原先的h2區塊。 <br>
+這時重新runserver，可以發現每一個月份的任務都會自動改變了!
+
+下一步，自己試著把每個月份的名字顯現在頁面上吧。
 
