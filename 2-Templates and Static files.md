@@ -98,7 +98,10 @@ INSTALLED_APPS = [
 ![image](https://user-images.githubusercontent.com/43126022/177370691-3501b59c-39bd-45b3-903f-db2d4e304028.png)
 
 我們用 <code> {{ text }} </code> 來取代原先的h2區塊。 <br>
-這時重新runserver，可以發現每一個月份的任務都會自動改變了!
+對Django來說，這個模式告訴他在讀取這個html檔案時，必須查找第三個參數所提供的dictionary中的變數來取代。<br>
+Django讀取參數後會重新生成一個html頭放出來。<br>
+
+重新runserver看看，可以發現每一個月份的任務都會自動改變了!
 
 下一步，自己試著把每個月份的名字顯現在頁面上吧。
 
