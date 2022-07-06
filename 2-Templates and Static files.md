@@ -124,6 +124,10 @@ HTML的部分改成:
 其實有另外一個方法，可以在views.py傳回小寫，然後在html中原先是 <code>{{title}}</code>的部分改成<code>{{title.capitalize()}}</code> <br>
 意思是，只要在雙括弧{{ }}裡面，呼叫python的語法，django還是會能夠使用<br>
 
-但這邊還要介紹一個django更快的方式，叫做filter。我們可以google "django template filter"，就可以到<a href = 'https://docs.djangoproject.com/en/4.0/ref/templates/builtins/'>官方頁面</a>
+但這邊還要介紹一個django更快的方式，叫做filter。我們可以google "django template filter"，就可以到<a href = 'https://docs.djangoproject.com/en/4.0/ref/templates/builtins/'>官方頁面</a>。<br>
+
+可以把filter想像成快速呼叫特定格式的django套件，呼叫filter要在template的html檔中把傳入的變數加上" | filter "。<br>
+舉轉成大寫為例，可以將 <code>{{title}} </code> 寫成 <code> {{title|title}} </code> (剛好這個filter就叫title)
+就可以看到轉換成大寫了
 
 
