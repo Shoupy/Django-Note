@@ -103,5 +103,27 @@ Django讀取參數後會重新生成一個html頭放出來。<br>
 
 重新runserver看看，可以發現每一個月份的任務都會自動改變了!
 
-下一步，自己試著把每個月份的名字顯現在頁面上吧。
+下一步，自己試著把每個月份的名字顯現在頁面上：
+<pre><code>def monthly_challenges(request, month):
+    try:
+        challenge_text = monthly_challenges_dict[month]
+        month_name = month.capitalize()
+        response_data = render(request, "challenges/challenge.html", {
+            "title": month_name,
+            "text" : challenge_text,
+        })
+    except:
+        return HttpResponseNotFound("this month is not supported. Sorry.")
+    return HttpResponse(response_data)</code></pre>
+
+HTML的部分改成:
+![image](https://user-images.githubusercontent.com/43126022/177593557-91eb30bf-d7b3-4114-8ccb-648496d71d44.png)
+
+## Filter
+在上面我們傳回title的時候，在views.py中直接將其轉換成大寫。<br>
+其實有另外一個方法，可以在views.py傳回小寫，然後在html中原先是 <code>{{title}}</code>的部分改成<code>{{title.capitalize()}}</code> <br>
+意思是，只要在雙括弧{{ }}裡面，呼叫python的語法，django還是會能夠使用<br>
+
+但這邊還要介紹一個django更快的方式，叫做filter。我們可以google "django template filter"，就可以到<a href = 'https://docs.djangoproject.com/en/4.0/ref/templates/builtins/'>官方頁面</a>
+
 
