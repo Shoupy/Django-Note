@@ -130,4 +130,25 @@ HTML的部分改成:
 舉轉成大寫為例，可以將 <code>{{title}} </code> 寫成 <code> {{title|title}} </code> (剛好這個filter就叫title)
 就可以看到轉換成大寫了
 
+## For Tag
+在前面的官方網站中我們可以看到另一種格式叫Tag<br>
+Tag也有各式各樣的用法可以呼叫，這邊先舉For tag為例。記得之前我們在目錄區index function有點土炮的用 for loop產生月份的list嗎?<br>
+現在在challenges/templates/challenges資料夾中，我們再新增一個項目叫index.html<br>
+
+我們將index.html裡面的內容改成這樣：
+![image](https://user-images.githubusercontent.com/43126022/177820392-fc94caf7-06d6-46c9-aa9c-35b8bbee0168.png)
+
+注意 for tag 的兩個特色：
+1. 以 <code> {%   %} </code>的形式
+2. for tag 後面要加一個 end tag 已告知for tag的結束
+
+接著我們將views.py中index函式改成如下：
+<pre><code>
+def index(request):
+    months = list(monthly_challenges_dict.keys()) # ["january", "february",....]
+    return render(request, "challenges/index.html", {
+        "months": months,
+    }) </code></pre>
+    
+這時候去run網頁，會發現清單創造出來了，但還無法提供連結 ...畢竟html中的a href還是空白的。
 
