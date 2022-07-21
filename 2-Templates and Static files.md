@@ -168,3 +168,12 @@ def index(request):
 注意這邊可以以空格的方式加入 arg，例如這邊需要寫上 for tag中產生的 month，因為原始的views.py中他也需要一個參數month，這邊的寫法也可以寫成： 
 <code> {% url "month-challenge" month = month %} </code>
 
+## If Tag
+  現在，假設我們的每月挑戰中，十二月是沒有挑戰的 <code> "December": None </code><br>
+  當你把資料庫設定成這樣時，點開12月的介面，會發現None還是會被顯示，就跟其他挑戰文字一樣。<br>
+  ![image](https://user-images.githubusercontent.com/43126022/180270390-4b452890-371c-4c26-b3d5-64f0d80d6c72.png) <br>
+  對我們比較理想的應該是：如果沒挑戰的時候出現其他的文字。這時就需要條件化的html設定，因此可用上 if Tag<br>
+  我們可以將 challenge.html 的內容改成這樣：
+  ![image](https://user-images.githubusercontent.com/43126022/180271039-236f0617-2199-4c9c-8b30-c36594b5c98e.png) <br>
+  注意 if tag也是需要 <code> {% endif %} </code> 來做結束的。 此外裡面可用的條件式描述就如同python code。
+
