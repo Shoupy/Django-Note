@@ -150,5 +150,13 @@ def index(request):
         "months": months,
     }) </code></pre>
     
-這時候去run網頁，會發現清單創造出來了，但還無法提供連結 ...畢竟html中的a href還是空白的。
+這時候去run網頁，會發現清單創造出來了，但還無法提供連結 ...畢竟html中的a href還是空白的。<br>
 
+讓我們進一步為html的list內容加入link，<code>{{ }}</code> 這類django變數的使用可以在html中的任何位置，因此可以像這樣：
+![image](https://user-images.githubusercontent.com/43126022/180261978-b8cfe3e1-0bb7-45bf-a59d-ea93f03740cb.png)
+將前面的網址直接打進去，並將後面需要的替代位置用 <code>{{ month }}</code> 輸入<br>
+
+## URL Tag
+不過這樣一來，我們又面臨到前面曾遇過的問題：像這樣直接打出的網址，如果因為某些原因必須更動時，所有直接打入(hardcoding)的地方都要手動更改，很容易出錯。<br>
+於是又可以運用前面的方法來修正。還記得urls.py中，我們幫其中一個url pattern取名叫"monthly-challenge"嗎?<br>
+<code> path("<str:month>", views.monthly_challenges,  name = "month-challenge") </code>
