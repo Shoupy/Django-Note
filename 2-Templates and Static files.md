@@ -153,10 +153,18 @@ def index(request):
 這時候去run網頁，會發現清單創造出來了，但還無法提供連結 ...畢竟html中的a href還是空白的。<br>
 
 讓我們進一步為html的list內容加入link，<code>{{ }}</code> 這類django變數的使用可以在html中的任何位置，因此可以像這樣：
-![image](https://user-images.githubusercontent.com/43126022/180261978-b8cfe3e1-0bb7-45bf-a59d-ea93f03740cb.png)
+![image](https://user-images.githubusercontent.com/43126022/180261978-b8cfe3e1-0bb7-45bf-a59d-ea93f03740cb.png)<br>
 將前面的網址直接打進去，並將後面需要的替代位置用 <code>{{ month }}</code> 輸入<br>
 
 ## URL Tag
 不過這樣一來，我們又面臨到前面曾遇過的問題：像這樣直接打出的網址，如果因為某些原因必須更動時，所有直接打入(hardcoding)的地方都要手動更改，很容易出錯。<br>
-於是又可以運用前面的方法來修正。還記得urls.py中，我們幫其中一個url pattern取名叫"monthly-challenge"嗎?<br>
-<code> path("<str:month>", views.monthly_challenges,  name = "month-challenge") </code>
+於是又可以運用前面的方法來修正。還記得前面為了動態化阿拉伯數字網址的轉換，urls.py中，我們幫其中一個url pattern取名叫"month-challenge"，然後使用Reverse嗎?<br>
+<code> path("<str:month>", views.monthly_challenges,  name = "month-challenge") </code> <br>
+
+  
+這次也是類似的方法，我們在html中使用 url tag: <code>  </code> 的形式，就會自動轉換成網址了<br>
+ ![image](https://user-images.githubusercontent.com/43126022/180267953-1822d5ac-6169-4758-b969-926ecfd3e4a6.png)
+
+注意這邊可以以空格的方式加入 arg，例如這邊需要寫上 for tag中產生的 month，因為原始的views.py中他也需要一個參數month，這邊的寫法也可以寫成： 
+<code> {% url "month-challenge" month = month %} </code>
+
